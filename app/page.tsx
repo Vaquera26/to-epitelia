@@ -132,9 +132,12 @@ export default async function Home() {
         )}
 
         <div className="text-center ">
-          <div className="inline-block bg-white px-10 py-5 rounded-full border-2" style={{ borderColor: '#efc1c8' }}>
-            <p className="text-xl md:text-2xl font-medium italic" style={{ color: '#e27fa0' }}>{phrase}</p>
-          </div>
+          <p className="text-3xl md:text-4xl font-bold italic" style={{ 
+            color: '#9e32a8',
+            textShadow: '2px 2px 4px rgba(226, 127, 160, 0.3)'
+          }}>
+            {phrase}
+          </p>
         </div>
 
         {photos.length > 0 && (
@@ -149,6 +152,12 @@ export default async function Home() {
             <PhotoGallery photos={photos} />
           </div>
         )}
+
+        <footer className="text-center py-8 mt-12">
+          <p className="text-lg md:text-xl font-medium italic" style={{ color: '#e27fa0' }}>
+            Hola, te hice esto con mucho cariño, te quiero &lt;3
+          </p>
+        </footer>
       </div>
     </main>
   )
