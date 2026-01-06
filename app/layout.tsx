@@ -9,7 +9,7 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
   title: "Para Epitelia",
-  description: "Un espacio especial",
+  description: "no se por q hice esto jaja",
   icons: {
     icon: [
       {
