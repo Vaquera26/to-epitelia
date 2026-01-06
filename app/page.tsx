@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server"
-import { Music, ExternalLink } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Heart } from "lucide-react"
 import { PhotoGallery } from "@/components/photo-gallery"
+import Image from "next/image"
 
 function getTimeBasedGreeting() {
   const hour = new Date().getHours()
@@ -52,53 +52,100 @@ async function getPhotos() {
   return data || []
 }
 
+function getSpotifyTrackId(url: string): string | null {
+  const match = url.match(/track\/([a-zA-Z0-9]+)/)
+  return match ? match[1] : null
+}
+
 export default async function Home() {
   const timeType = getTimeBasedGreeting()
   const phrase = await getRandomPhrase(timeType)
   const song = await getTodaysSong()
   const photos = await getPhotos()
 
-  return (
-    <main className="min-h-screen bg-pink-50 p-4 md:p-8">
-      <div className="mx-auto max-w-3xl">
-        <div className="mb-8 text-center">
-          <h1 className="text-2xl md:text-3xl font-semibold text-pink-800">{phrase}</h1>
-        </div>
+  const spotifyTrackId = song?.external_url ? getSpotifyTrackId(song.external_url) : null
 
+  return (
+    <main className="min-h-screen p-4 md:p-8" style={{ backgroundColor: '#f6dde1' }}>
+      <div className="mx-auto max-w-4xl space-y-12">
         {song && (
-          <div className="mb-10 bg-white rounded-2xl overflow-hidden border-2 border-pink-200">
-            <div className="p-6">
-              <div className="flex flex-col md:flex-row gap-6 items-center">
-                <div className="flex-shrink-0">
+          <div className="bg-white rounded-3xl border-2 overflow-hidden" style={{ borderColor: '#efc1c8' }}>
+            <div className="relative">
+              <div className="absolute top-6 left-6 z-10">
+                <div className="w-16 h-16 md:w-20 md:h-20">
+                  <Image
+                    src="/snoopy1.png"
+                    alt="Snoopy"
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+
+              <div className="absolute top-6 right-6 z-10">
+                <div className="w-16 h-16 md:w-20 md:h-20">
+                  <Image
+                    src="/snoopy2.png"
+                    alt="Snoopy"
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
+                </div>
+              </div>
+
+                <div className="flex flex-col items-center py-12 px-6 space-y-8">
+                <div className="relative">
+                  <div className="absolute -inset-3 rounded-2xl" style={{ backgroundColor: '#f6dde1' }}></div>
                   <img
                     src={song.album_image_url || "/placeholder.svg"}
                     alt={song.album}
-                    className="w-48 h-48 object-cover rounded-xl"
+                    className="relative w-64 h-64 md:w-72 md:h-72 object-cover rounded-xl border-4"
+                    style={{ borderColor: '#efc1c8' }}
                   />
                 </div>
 
-                <div className="flex-grow text-center md:text-left">
-                  <h2 className="text-xl font-semibold text-gray-900 mb-1">{song.name}</h2>
-                  <p className="text-base text-gray-600 mb-4">{song.artist}</p>
-
-                  <Button
-                    asChild
-                    className="bg-pink-400 hover:bg-pink-500 text-white rounded-full px-6 py-2"
-                  >
-                    <a href={song.external_url} target="_blank" rel="noopener noreferrer">
-                      Reproducir
-                      <ExternalLink className="ml-2 w-4 h-4" />
-                    </a>
-                  </Button>
+                <div className="text-center space-y-2">
+                  <h2 className="text-2xl md:text-3xl font-bold" style={{ color: '#e27fa0' }}>{song.name}</h2>
+                  <p className="text-lg" style={{ color: '#e27fa0' }}>{song.artist}</p>
                 </div>
+
+                {spotifyTrackId && (
+                  <div className="w-full max-w-md">
+                    <iframe
+                      style={{ borderRadius: '12px' }}
+                      src={`https://open.spotify.com/embed/track/${spotifyTrackId}?utm_source=generator`}
+                      width="100%"
+                      height="152"
+                      frameBorder="0"
+                      allowFullScreen
+                      allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                      loading="lazy"
+                      title={`${song.name} - ${song.artist}`}
+                    />
+                  </div>
+                )}
               </div>
             </div>
           </div>
         )}
 
+        <div className="text-center ">
+          <div className="inline-block bg-white px-10 py-5 rounded-full border-2" style={{ borderColor: '#efc1c8' }}>
+            <p className="text-xl md:text-2xl font-medium italic" style={{ color: '#e27fa0' }}>{phrase}</p>
+          </div>
+        </div>
+
         {photos.length > 0 && (
           <div>
-            <h2 className="text-2xl font-semibold text-center text-pink-800 mb-6">Nuestros Momentos</h2>
+            <div className="text-center mb-8">
+              
+               
+                <h2 className="text-1xl md:text-3xl font-bold" style={{ color: '#e27fa0' }}>Salidas</h2>
+                
+         
+            </div>
             <PhotoGallery photos={photos} />
           </div>
         )}

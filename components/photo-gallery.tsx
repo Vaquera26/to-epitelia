@@ -7,6 +7,7 @@ interface Photo {
   id: number
   filename: string
   description: string | null
+  created_at: string
 }
 
 interface PhotoGalleryProps {

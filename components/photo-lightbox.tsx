@@ -9,6 +9,7 @@ interface Photo {
   id: number
   filename: string
   description: string | null
+  created_at: string
 }
 
 interface PhotoLightboxProps {
@@ -41,15 +42,29 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
 
   const currentPhoto = photos[currentIndex]
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString)
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+    const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
+    
+    const dayName = days[date.getDay()]
+    const dayNumber = date.getDate()
+    const month = months[date.getMonth()]
+    
+    return `${dayName} ${dayNumber} de ${month}`
+  }
+
   return (
     <div 
-      className="fixed inset-0 z-50 bg-pink-100 flex items-center justify-center p-4" 
+      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      style={{ backgroundColor: '#f6dde1' }}
       onClick={onClose}
     >
       <Button
         variant="ghost"
         size="icon"
-        className="absolute top-4 right-4 text-pink-600 hover:bg-pink-200 rounded-full z-10 border-2 border-pink-300"
+        className="absolute top-4 right-4 rounded-full z-10 border-2"
+        style={{ color: '#e27fa0', borderColor: '#efc1c8' }}
         onClick={onClose}
       >
         <X className="w-6 h-6" />
@@ -60,7 +75,8 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
           <Button
             variant="ghost"
             size="icon"
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-pink-600 hover:bg-pink-200 rounded-full border-2 border-pink-300"
+            className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full border-2"
+            style={{ color: '#e27fa0', borderColor: '#efc1c8' }}
             onClick={(e) => {
               e.stopPropagation()
               goToPrevious()
@@ -72,7 +88,8 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
           <Button
             variant="ghost"
             size="icon"
-            className="absolute right-4 top-1/2 -translate-y-1/2 text-pink-600 hover:bg-pink-200 rounded-full border-2 border-pink-300"
+            className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full border-2"
+            style={{ color: '#e27fa0', borderColor: '#efc1c8' }}
             onClick={(e) => {
               e.stopPropagation()
               goToNext()
@@ -84,7 +101,7 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
       )}
 
       <div className="max-w-5xl w-full relative" onClick={(e) => e.stopPropagation()}>
-        <div className="relative bg-pink-200 p-4 md:p-6 rounded-3xl">
+        <div className="relative p-4 md:p-6 rounded-3xl" style={{ backgroundColor: '#efc1c8' }}>
           <div className="relative bg-white p-2 md:p-3 rounded-2xl">
             <div className="absolute -top-8 -left-8 md:-top-12 md:-left-12 z-10 w-20 h-20 md:w-28 md:h-28">
               <Image
@@ -104,8 +121,8 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
               />
             </div>
 
-            <Heart className="absolute top-4 right-4 w-6 h-6 text-pink-300 fill-pink-200" />
-            <Heart className="absolute bottom-4 left-4 w-5 h-5 text-rose-300 fill-rose-200" />
+            <Heart className="absolute top-4 right-4 w-6 h-6" style={{ color: '#efc1c8', fill: '#f6dde1' }} />
+            <Heart className="absolute bottom-4 left-4 w-5 h-5" style={{ color: '#efc1c8', fill: '#f6dde1' }} />
 
             <img
               src={
@@ -120,9 +137,12 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
 
           {currentPhoto.description && (
             <div className="mt-6 text-center px-4">
-              <div className="inline-block bg-white px-6 py-3 rounded-full border-2 border-pink-200">
-                <p className="text-pink-800 text-base md:text-lg font-semibold italic">
+              <div className="inline-block bg-white px-6 py-3 rounded-full border-2" style={{ borderColor: '#efc1c8' }}>
+                <p className="text-base md:text-lg font-semibold italic" style={{ color: '#e27fa0' }}>
                   {currentPhoto.description}
+                </p>
+                <p className="text-sm mt-1" style={{ color: '#e27fa0' }}>
+                  {formatDate(currentPhoto.created_at)}
                 </p>
               </div>
             </div>
@@ -130,7 +150,7 @@ export function PhotoLightbox({ photos, initialIndex, onClose }: PhotoLightboxPr
 
           {photos.length > 1 && (
             <div className="mt-4 text-center">
-              <span className="inline-block bg-pink-300 text-pink-800 px-4 py-2 rounded-full text-sm font-medium">
+              <span className="inline-block px-4 py-2 rounded-full text-sm font-medium" style={{ backgroundColor: '#efc1c8', color: '#5a2633' }}>
                 {currentIndex + 1} de {photos.length} recuerdos
               </span>
             </div>
